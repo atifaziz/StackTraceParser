@@ -85,6 +85,22 @@ Here is one example of how you would call it:
             fl.Line,
         });
 
+If all you care about is the text of each component then you can use a simpler
+overload of the `Parse` method:
+
+    var result = StackTraceParser.Parse(
+        Environment.StackTrace,
+        (f, t, m, pl, ps, fn, ln) => new
+        {
+            Frame         = f, 
+            Type          = t,
+            Method        = m,
+            ParameterList = pl,
+            Parameters    = ps,
+            File          = fn,
+            Line          = ln,
+        });
+
 ## Background
 
 `StackTraceParser` was born as part of the [ELMAH][elmah] project and used to

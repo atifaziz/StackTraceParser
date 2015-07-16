@@ -35,42 +35,16 @@ namespace Tests
                     at System.Web.HttpApplication.MapHttpHandler(HttpContext context, String requestType, VirtualPath path, String pathTranslated, Boolean useAppConfig)
                     at System.Web.HttpApplication.MapHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
                     at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)",
-                (idx, len, txt) => new
-                {
-                    Index  = idx,
-                    Length = len,
-                    Text   = txt,
-                },
-                (type, method) => new
-                {
-                    Type   = type,
-                    Method = method,
-                },
-                (type, name) => new
-                {
-                    Type = type,
-                    Name = name,
-                },
-                (pl, ps) => new
-                {
-                    List = pl,
-                    Parameters = ps,
-                },
-                (file, line) => new
-                {
-                    File = file,
-                    Line = line,
-                },
-                (f, tm, p, fl) => new
-                {
-                    Frame         = f.Text,
-                    Type          = tm.Type.Text,
-                    Method        = tm.Method.Text,
-                    ParameterList = p.List.Text,
-                    Parameters    = string.Join(", ", p.Parameters.Select(e => e.Type.Text + " " + e.Name.Text).ToArray()),
-                    File          = fl.File.Text,
-                    Line          = fl.Line.Text,
-                });
+                 (f, t, m, pl, ps, fn, ln) => new
+                 {
+                     Frame         = f,
+                     Type          = t,
+                     Method        = m,
+                     ParameterList = pl,
+                     Parameters    = string.Join(", ", from e in ps select e.Key + " " + e.Value),
+                     File          = fn,
+                     Line          = ln,
+                 });
 
             var expectations = new[]
             {
@@ -79,7 +53,7 @@ namespace Tests
                     Frame          = @"Elmah.ErrorLogPageFactory.FindHandler(String name) in C:\ELMAH\src\Elmah\ErrorLogPageFactory.cs:line 126",
                     Type           = @"Elmah.ErrorLogPageFactory",
                     Method         = @"FindHandler",
-                    ParameterList = @"(String name)",
+                    ParameterList  = @"(String name)",
                     Parameters     = @"String name",
                     File           = @"C:\ELMAH\src\Elmah\ErrorLogPageFactory.cs",
                     Line           = @"126",
@@ -126,7 +100,7 @@ namespace Tests
                 },
             };
 
-            Assert.AreEqual(expectations, actuals);
+            Assert.That(expectations, Is.EqualTo(actuals));
         }
 
         [Test] // See https://code.google.com/p/elmah/issues/detail?id=320
@@ -141,40 +115,14 @@ namespace Tests
                     at System.Web.Mvc.MvcHandler.BeginProcessRequest (System.Web.HttpContext httpContext, System.AsyncCallback callback, System.Object state) [0x00000] in <filename unknown>:0
                     at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest (System.Web.HttpContext context, System.AsyncCallback cb, System.Object extraData) [0x00000] in <filename unknown>:0
                     at System.Web.HttpApplication+<Pipeline>c__Iterator3.MoveNext () [0x00000] in <filename unknown>:0",
-                (idx, len, txt) => new
+                (f, t, m, pl, ps, fn, ln) => new
                 {
-                    Index  = idx,
-                    Length = len,
-                    Text   = txt,
-                },
-                (type, method) => new
-                {
-                    Type = type,
-                    Method = method,
-                },
-                (type, name) => new
-                {
-                    Type = type,
-                    Name = name,
-                },
-                (pl, ps) => new
-                {
-                    List = pl,
-                    Parameters = ps,
-                },
-                (file, line) => new
-                {
-                    File = file,
-                    Line = line,
-                },
-                (f, tm, p, fl) => new
-                {
-                    Type          = tm.Type.Text,
-                    Method        = tm.Method.Text,
-                    ParameterList = p.List.Text,
-                    Parameters    = string.Join(", ", p.Parameters.Select(e => e.Type.Text + " " + e.Name.Text).ToArray()),
-                    File          = fl.File.Text,
-                    Line          = fl.Line.Text,
+                    Type          = t,
+                    Method        = m,
+                    ParameterList = pl,
+                    Parameters    = string.Join(", ", from e in ps select e.Key + " " + e.Value),
+                    File          = fn,
+                    Line          = ln,
                 });
 
             var expectations =
@@ -243,7 +191,7 @@ namespace Tests
                     File = "filename unknown", Line = "0",
                 };
 
-            Assert.AreEqual(expectations, actuals);
+            Assert.That(expectations, Is.EqualTo(actuals));
         }
     }
 }
