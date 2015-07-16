@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+        <id>StackTraceParser.Source</id>
+        <version>1.0.0</version>
+        <title>StackTraceParser (C# Source)</title>
+        <authors>Atif Aziz</authors>
+        <owners>Atif Aziz</owners>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://github.com/atifaziz/StackTraceParser</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Parser for .NET and Mono stack traces.</description>
+        <language>en-US</language>
+        <tags>stack trace parser diagnostics exception</tags>
+        <releaseNotes>Initial release created from ELMAH sources</releaseNotes>
+    </metadata>
+    <files>
+        <file src="StackTraceParser.cs.pp" target="content\App_Packages\StackTraceParser" />
+        <file src="COPYING.txt" target="COPYING.txt" />
+    </files>
+</package>
