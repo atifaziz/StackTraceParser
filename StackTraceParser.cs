@@ -67,6 +67,8 @@ namespace Elmah
             string text,
             Func<string, string, string, string, IEnumerable<KeyValuePair<string, string>>, string, string, T> selector)
         {
+            if (selector == null) throw new ArgumentNullException("selector");
+
             return Parse(text, (idx, len, txt) => txt,
                                (t, m) => new { Type = t, Method = m },
                                (pt, pn) => new KeyValuePair<string, string>(pt, pn),
@@ -85,6 +87,13 @@ namespace Elmah
             Func<TToken, TToken, TSourceLocation> sourceLocationSelector,
             Func<TToken, TMethod, TParameters, TSourceLocation, TFrame> selector)
         {
+            if (tokenSelector == null) throw new ArgumentNullException("tokenSelector");
+            if (methodSelector == null) throw new ArgumentNullException("methodSelector");
+            if (parameterSelector == null) throw new ArgumentNullException("parameterSelector");
+            if (parametersSelector == null) throw new ArgumentNullException("parametersSelector");
+            if (sourceLocationSelector == null) throw new ArgumentNullException("sourceLocationSelector");
+            if (selector == null) throw new ArgumentNullException("selector");
+
             return from Match m in Regex.Matches(text)
                    select m.Groups into groups
                    let pt = groups["pt"].Captures

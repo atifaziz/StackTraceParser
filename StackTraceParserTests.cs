@@ -40,6 +40,103 @@ namespace Tests
     [TestFixture]
     public sealed class StackTraceParserTests
     {
+        [Test]
+        public void ParseWithSimpleOverloadFailsWithNullSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() => StackTraceParser.Parse<object>(string.Empty, null));
+            Assert.That(e.ParamName, Is.EqualTo("selector"));
+        }
+
+        [Test]
+        public void ParseFailsWithNullTokenSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                StackTraceParser.Parse<object, object, object, object, object, object>(
+                    string.Empty,
+                    null,
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; }));
+            Assert.That(e.ParamName, Is.EqualTo("tokenSelector"));
+        }
+
+        [Test]
+        public void ParseFailsWithNullMethodSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                StackTraceParser.Parse<object, object, object, object, object, object>(
+                    string.Empty,
+                    delegate { return null; },
+                    null,
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; }));
+            Assert.That(e.ParamName, Is.EqualTo("methodSelector"));
+        }
+
+        [Test]
+        public void ParseFailsWithNullParameterSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                StackTraceParser.Parse<object, object, object, object, object, object>(
+                    string.Empty,
+                    delegate { return null; },
+                    delegate { return null; },
+                    null,
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; }));
+            Assert.That(e.ParamName, Is.EqualTo("parameterSelector"));
+        }
+
+        [Test]
+        public void ParseFailsWithNullParametersSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                StackTraceParser.Parse<object, object, object, object, object, object>(
+                    string.Empty,
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    null,
+                    delegate { return null; },
+                    delegate { return null; }));
+            Assert.That(e.ParamName, Is.EqualTo("parametersSelector"));
+        }
+
+        [Test]
+        public void ParseFailsWithNullSourceLocationSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                StackTraceParser.Parse<object, object, object, object, object, object>(
+                    string.Empty,
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    null,
+                    delegate { return null; }));
+            Assert.That(e.ParamName, Is.EqualTo("sourceLocationSelector"));
+        }
+
+        [Test]
+        public void ParseFailsWithNullSelector()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                StackTraceParser.Parse<object, object, object, object, object, object>(
+                    string.Empty,
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    delegate { return null; },
+                    null));
+            Assert.That(e.ParamName, Is.EqualTo("selector"));
+        }
+
         const string DotNetStackTrace = @"
             Elmah.TestException: This is a test exception that can be safely ignored.
                 at Elmah.ErrorLogPageFactory.FindHandler(String name) in C:\ELMAH\src\Elmah\ErrorLogPageFactory.cs:line 126
