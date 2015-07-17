@@ -15,25 +15,9 @@ a C# project.
 
 ## Usage
 
-Here is an example of a [`Environment.StackTrace`][envst] output:
-
-    at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
-    at System.Environment.get_StackTrace()
-    at UserQuery.RunUserAuthoredQuery() in c:\Users\johndoe\AppData\Local\Temp\LINQPad\_piwdiese\query_dhwxhm.cs:line 33
-    at LINQPad.ExecutionModel.ClrQueryRunner.Run()
-    at LINQPad.ExecutionModel.Server.RunQuery(QueryRunner runner)
-    at LINQPad.ExecutionModel.Server.StartQuery(QueryRunner runner)
-    at LINQPad.ExecutionModel.Server.<>c__DisplayClass36.<ExecuteClrQuery>b__35()
-    at LINQPad.ExecutionModel.Server.SingleThreadExecuter.Work()
-    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
-    at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-    at System.Threading.ThreadHelper.ThreadStart()
-
 `StackTraceParser` has a single function called `Parse` that takes the source
-text (like the one above) to parse and a number of functions to
-project/construct each component of a stack frame as it is parsed:
+text to parse and a number of functions to project/construct each component of
+a stack frame as it is parsed:
 
     public static IEnumerable<TFrame> Parse<TToken, TMethod, TParameters, TParameter, TSourceLocation, TFrame>(
         string text,
@@ -79,11 +63,33 @@ Here is one example of how you would call it:
             Frame = f,         // is a sequence of this.
             tm.Type,
             tm.Method,
-            ParameterList = p.List.Text,
+            ParameterList = p.List,
             p.Parameters,
             fl.File,
             fl.Line,
         });
+
+Suppose [`Environment.StackTrace`][envst] returns (produced by running
+`Environment.StackTrace` as an expression in [LINQPad][linqpad]):
+
+    at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+    at System.Environment.get_StackTrace()
+    at UserQuery.RunUserAuthoredQuery() in c:\Users\johndoe\AppData\Local\Temp\LINQPad\_piwdiese\query_dhwxhm.cs:line 33
+    at LINQPad.ExecutionModel.ClrQueryRunner.Run()
+    at LINQPad.ExecutionModel.Server.RunQuery(QueryRunner runner)
+    at LINQPad.ExecutionModel.Server.StartQuery(QueryRunner runner)
+    at LINQPad.ExecutionModel.Server.<>c__DisplayClass36.<ExecuteClrQuery>b__35()
+    at LINQPad.ExecutionModel.Server.SingleThreadExecuter.Work()
+    at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+    at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+    at System.Threading.ThreadHelper.ThreadStart()
+
+Parsing it using the `StackTraceParser.Parse` example call shown earlier
+will yield the following object graph:
+
+> [Output][egout]
 
 If all you care about is the text of each component then you can use a simpler
 overload of the `Parse` method:
@@ -118,4 +124,5 @@ stack trace in HTML][elmaheg].
   [elmah]: https://elmah.github.io/
   [elmaheg]: https://bitbucket.org/project-elmah/main/src/2a6b0b5916a6b4913ca5af4c22c4e4fc69f1260d/src/Elmah.AspNet/ErrorDetailPage.cs?at=default#cl-45
   [errdp]: https://bitbucket.org/project-elmah/main/src/2a6b0b5916a6b4913ca5af4c22c4e4fc69f1260d/src/Elmah.AspNet/ErrorDetailPage.cs?at=default
-
+  [linqpad]: https://www.linqpad.net/
+  [egout]: https://atifaziz.github.io/projects/stack-trace-parser/linqpad-example-output.html
