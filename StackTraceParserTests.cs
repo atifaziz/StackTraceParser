@@ -30,6 +30,9 @@ namespace Tests
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     class StackTraceTestCase : TestCaseAttribute
     {
+        public StackTraceTestCase(string stackTrace, int index, string frame) :
+            base(stackTrace, index, frame) {}
+
         public StackTraceTestCase(string stackTrace, int index,
                  string frame,
                  string type, string method, string parameterList, string parameters,
@@ -266,6 +269,53 @@ namespace Tests
             Parse(stackTrace, index, frame, type, method, parameterList, parameters, file, line);
         }
 
+        // Tests bug reported in issue #2:
+        // https://github.com/atifaziz/StackTraceParser/issues/2
+
+        const string SpaceBugStackTrace = @"
+            System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.ArgumentException: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+            Parameter name: 9f567029-a6c4-4232-bab0-177ab8d5a67x ---> System.FormatException: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+               at System.Guid.GuidResult.SetFailure(ParseFailureKind failure, String failureMessageID, Object failureMessageFormatArgument, String failureArgumentName, Exception innerException)
+               at System.Guid.TryParseGuidWithDashes(String guidString, GuidResult& result)
+               at System.Guid.TryParseGuid(String g, GuidStyles flags, GuidResult& result)
+               at System.Guid..ctor(String g)
+               at Elmah.XmlFileErrorLog.GetError(String id)
+               --- End of inner exception stack trace ---
+               at Elmah.XmlFileErrorLog.GetError(String id)
+               at Elmah.ErrorDetailPage.OnLoad(EventArgs e)
+               at System.Web.UI.Control.LoadRecursive()
+               at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+               at System.Web.UI.Page.HandleError(Exception e)
+               at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+               at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+               at System.Web.UI.Page.ProcessRequest()
+               at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+               at System.Web.UI.Page.ProcessRequest(HttpContext context)
+               at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+               at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)";
+
+        [StackTraceTestCase(SpaceBugStackTrace, 00, @"System.Guid.GuidResult.SetFailure(ParseFailureKind failure, String failureMessageID, Object failureMessageFormatArgument, String failureArgumentName, Exception innerException)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 01, @"System.Guid.TryParseGuidWithDashes(String guidString, GuidResult& result)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 02, @"System.Guid.TryParseGuid(String g, GuidStyles flags, GuidResult& result)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 03, @"System.Guid..ctor(String g)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 04, @"Elmah.XmlFileErrorLog.GetError(String id)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 05, @"Elmah.XmlFileErrorLog.GetError(String id)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 06, @"Elmah.ErrorDetailPage.OnLoad(EventArgs e)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 07, @"System.Web.UI.Control.LoadRecursive()")]
+        [StackTraceTestCase(SpaceBugStackTrace, 08, @"System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 09, @"System.Web.UI.Page.HandleError(Exception e)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 10, @"System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 11, @"System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 12, @"System.Web.UI.Page.ProcessRequest()")]
+        [StackTraceTestCase(SpaceBugStackTrace, 13, @"System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 14, @"System.Web.UI.Page.ProcessRequest(HttpContext context)")]
+        [StackTraceTestCase(SpaceBugStackTrace, 15, @"System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()")]
+        [StackTraceTestCase(SpaceBugStackTrace, 16, @"System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)")]
+        public void ParseSpaceBugStackTrace(string stackTrace, int index, string frame)
+        {
+            Parse(stackTrace, index, frame);
+        }
+
         static void Parse(string stackTrace, int index,
             string frame,
             string type, string method, string parameterList, string parameters,
@@ -292,6 +342,16 @@ namespace Tests
             Assert.That(parameters   , Is.EqualTo(actual.Parameters)   , "Parameters");
             Assert.That(file         , Is.EqualTo(actual.File)         , "File");
             Assert.That(line         , Is.EqualTo(actual.Line)         , "Line");
+        }
+
+        static void Parse(string stackTrace, int index, string frame)
+        {
+            var actuals = StackTraceParser.Parse(stackTrace,
+                 (f, t, m, pl, ps, fn, ln) => f);
+
+            var actual = actuals.ElementAt(index);
+
+            Assert.That(frame, Is.EqualTo(actual));
         }
     }
 }

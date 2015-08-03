@@ -31,24 +31,26 @@ namespace Elmah
 
     partial class StackTraceParser
     {
+        const string Space = @"[\x20\t]";
+
         static readonly Regex Regex = new Regex(@"
             ^
-            \s*
-            \w+ \s+
+            " + Space + @"*
+            \w+ " + Space + @"+
             (?<frame>
                 (?<type> .+ ) \.
-                (?<method> .+? ) \s*
-                (?<params>  \( ( \s* \)
-                               |        (?<pt> .+?) \s+ (?<pn> .+?)
-                                 (, \s* (?<pt> .+?) \s+ (?<pn> .+?) )* \) ) )
-                ( \s+
+                (?<method> .+? ) " + Space + @"*
+                (?<params>  \( ( " + Space + @"* \)
+                               |        (?<pt> .+?) " + Space + @"+ (?<pn> .+?)
+                                 (, " + Space + @"* (?<pt> .+?) " + Space + @"+ (?<pn> .+?) )* \) ) )
+                ( " + Space + @"+
                     ( # Microsoft .NET stack traces
-                    \w+ \s+
+                    \w+ " + Space + @"+
                     (?<file> [a-z] \: .+? )
-                    \: \w+ \s+
+                    \: \w+ " + Space + @"+
                     (?<line> [0-9]+ ) \p{P}?
                     | # Mono stack traces
-                    \[0x[0-9a-f]+\] \s+ \w+ \s+
+                    \[0x[0-9a-f]+\] " + Space + @"+ \w+ " + Space + @"+
                     <(?<file> [^>]+ )>
                     :(?<line> [0-9]+ )
                     )
