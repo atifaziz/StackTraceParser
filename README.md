@@ -10,7 +10,7 @@ including the following components:
 - Parameter types and names
 - File and line information, if present
 
-It is available as a [NuGet *soruce* package][srcpkg] that directly embeds into
+It is available as a [NuGet *source* package][srcpkg] that directly embeds into
 a C# project.
 
 ## Usage
