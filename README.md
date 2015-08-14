@@ -122,7 +122,7 @@ stack trace in HTML][elmaheg].
   [exst]: https://msdn.microsoft.com/en-us/library/system.exception.stacktrace(v=vs.110).aspx
   [srcpkg]: https://www.nuget.org/packages/StackTraceParser.Source
   [elmah]: https://elmah.github.io/
-  [elmaheg]: https://bitbucket.org/project-elmah/main/src/2a6b0b5916a6b4913ca5af4c22c4e4fc69f1260d/src/Elmah.AspNet/ErrorDetailPage.cs?at=default#cl-45
+  [elmaheg]: https://bitbucket.org/project-elmah/main/src/2a6b0b5916a6b4913ca5af4c22c4e4fc69f1260d/src/Elmah.AspNet/ErrorDetailPage.cs?at=default#ErrorDetailPage.cs-45
   [errdp]: https://bitbucket.org/project-elmah/main/src/2a6b0b5916a6b4913ca5af4c22c4e4fc69f1260d/src/Elmah.AspNet/ErrorDetailPage.cs?at=default
   [linqpad]: https://www.linqpad.net/
   [egout]: https://atifaziz.github.io/projects/stack-trace-parser/linqpad-example-output.html
