@@ -19,55 +19,59 @@ a C# project.
 text to parse and a number of functions to project/construct each component of
 a stack frame as it is parsed:
 
-    public static IEnumerable<TFrame> Parse<TToken, TMethod, TParameters, TParameter, TSourceLocation, TFrame>(
-        string text,
-        Func<int, int, string, TToken> tokenSelector,
-        Func<TToken, TToken, TMethod> methodSelector,
-        Func<TToken, TToken, TParameter> parameterSelector,
-        Func<TToken, IEnumerable<TParameter>, TParameters> parametersSelector,
-        Func<TToken, TToken, TSourceLocation> sourceLocationSelector,
-        Func<TToken, TMethod, TParameters, TSourceLocation, TFrame> selector)
+```c#
+public static IEnumerable<TFrame> Parse<TToken, TMethod, TParameters, TParameter, TSourceLocation, TFrame>(
+    string text,
+    Func<int, int, string, TToken> tokenSelector,
+    Func<TToken, TToken, TMethod> methodSelector,
+    Func<TToken, TToken, TParameter> parameterSelector,
+    Func<TToken, IEnumerable<TParameter>, TParameters> parametersSelector,
+    Func<TToken, TToken, TSourceLocation> sourceLocationSelector,
+    Func<TToken, TMethod, TParameters, TSourceLocation, TFrame> selector)
+```
 
 Here is one example of how you would call it:
 
-    var result = StackTraceParser.Parse(
-        Environment.StackTrace,
-        (idx, len, txt) => new // the token is the smallest unit, made of:
-        {
-            Index  = idx,      // - the index of the token text start
-            Length = len,      // - the length of the token text
-            Text   = txt,      // - the actual token text
-        },
-        (type, method) => new  // the method and its declaring type
-        {
-            Type   = type,
-            Method = method,
-        },
-        (type, name) => new    // this is called back for each parameter with:
-        {
-            Type = type,       // - the parameter type
-            Name = name,       // - the parameter name
-        },
-        (pl, ps) => new        // the parameter list and sequence of parameters
-        {
-            List = pl,         // - spans all parameters, including parentheses
-            Parameters = ps,   // - sequence of individual parameters
-        },
-        (file, line) => new    // source file and line info
-        {                      // called back if present
-            File = file,
-            Line = line,
-        },
-        (f, tm, p, fl) => new  // finally, put all the components of a frame
-        {                      // together! The result of the parsing function
-            Frame = f,         // is a sequence of this.
-            tm.Type,
-            tm.Method,
-            ParameterList = p.List,
-            p.Parameters,
-            fl.File,
-            fl.Line,
-        });
+```c#
+var result = StackTraceParser.Parse(
+    Environment.StackTrace,
+    (idx, len, txt) => new // the token is the smallest unit, made of:
+    {
+        Index  = idx,      // - the index of the token text start
+        Length = len,      // - the length of the token text
+        Text   = txt,      // - the actual token text
+    },
+    (type, method) => new  // the method and its declaring type
+    {
+        Type   = type,
+        Method = method,
+    },
+    (type, name) => new    // this is called back for each parameter with:
+    {
+        Type = type,       // - the parameter type
+        Name = name,       // - the parameter name
+    },
+    (pl, ps) => new        // the parameter list and sequence of parameters
+    {
+        List = pl,         // - spans all parameters, including parentheses
+        Parameters = ps,   // - sequence of individual parameters
+    },
+    (file, line) => new    // source file and line info
+    {                      // called back if present
+        File = file,
+        Line = line,
+    },
+    (f, tm, p, fl) => new  // finally, put all the components of a frame
+    {                      // together! The result of the parsing function
+        Frame = f,         // is a sequence of this.
+        tm.Type,
+        tm.Method,
+        ParameterList = p.List,
+        p.Parameters,
+        fl.File,
+        fl.Line,
+    });
+```
 
 Suppose [`Environment.StackTrace`][envst] returns (produced by running
 `Environment.StackTrace` as an expression in [LINQPad][linqpad]):
@@ -94,18 +98,20 @@ will yield the following object graph:
 If all you care about is the text of each component then you can use a simpler
 overload of the `Parse` method:
 
-    var result = StackTraceParser.Parse(
-        Environment.StackTrace,
-        (f, t, m, pl, ps, fn, ln) => new
-        {
-            Frame         = f, 
-            Type          = t,
-            Method        = m,
-            ParameterList = pl,
-            Parameters    = ps,
-            File          = fn,
-            Line          = ln,
-        });
+```c#
+var result = StackTraceParser.Parse(
+    Environment.StackTrace,
+    (f, t, m, pl, ps, fn, ln) => new
+    {
+        Frame         = f,
+        Type          = t,
+        Method        = m,
+        ParameterList = pl,
+        Parameters    = ps,
+        File          = fn,
+        Line          = ln,
+    });
+```
 
 ## Background
 
