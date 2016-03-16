@@ -32,16 +32,17 @@ namespace Elmah
     partial class StackTraceParser
     {
         const string Space = @"[\x20\t]";
+        const string NotSpace = @"[^\x20\t]";
 
         static readonly Regex Regex = new Regex(@"
             ^
             " + Space + @"*
             \w+ " + Space + @"+
             (?<frame>
-                (?<type> .+ ) \.
-                (?<method> .+? ) " + Space + @"*
+                (?<type> " + NotSpace + @"+ ) \.
+                (?<method> " + NotSpace + @"+? ) " + Space + @"*
                 (?<params>  \( ( " + Space + @"* \)
-                               |        (?<pt> .+?) " + Space + @"+ (?<pn> .+?)
+                               |                    (?<pt> .+?) " + Space + @"+ (?<pn> .+?)
                                  (, " + Space + @"* (?<pt> .+?) " + Space + @"+ (?<pn> .+?) )* \) ) )
                 ( " + Space + @"+
                     ( # Microsoft .NET stack traces
