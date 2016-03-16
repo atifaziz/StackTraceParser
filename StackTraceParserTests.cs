@@ -197,7 +197,7 @@ namespace Tests
             Parse(stackTrace, index, frame, type, method, parameterList, parameters, file, line);
         }
 
-        // See https://code.google.com/p/elmah/issues/detail?id=320
+        // See https://github.com/elmah/Elmah/issues/320
 
         const string MonoStackTrace = @"
             System.Web.HttpException: The controller for path '/helloworld' was not found or does not implement IController.
