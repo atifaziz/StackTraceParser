@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>StackTraceParser.Source</id>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
         <title>StackTraceParser (C# Source)</title>
         <authors>Atif Aziz</authors>
         <owners>Atif Aziz</owners>
@@ -13,7 +13,7 @@
         <description>Parser for .NET and Mono stack traces.</description>
         <language>en-US</language>
         <tags>stack trace parser diagnostics exception</tags>
-        <releaseNotes>Copyright year fix</releaseNotes>
+        <releaseNotes>Adds time-out safety net and fixes runaway expression issue #4. See https://github.com/atifaziz/StackTraceParser/issues/4 for more information.</releaseNotes>
     </metadata>
     <files>
         <file src="StackTraceParser.cs.pp" target="content\App_Packages\StackTraceParser" />
