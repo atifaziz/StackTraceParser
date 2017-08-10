@@ -343,7 +343,6 @@ namespace Tests
                at NHibernate.Loader.Loader.GetRowFromResultSet(IDataReader resultSet, ISessionImplementor session, QueryParameters queryParameters, LockMode[] lockModeArray, EntityKey optionalObjectKey, IList hydratedObjects, EntityKey[] keys, Boolean returnProxies, IResultTransformer forcedResultTransformer)
                at NHibernate.Impl.MultiQueryImpl.DoList()";
 
-        [Ignore("Pending fix for issue #4 (https://github.com/atifaziz/StackTraceParser/issues/4)")]
         [StackTraceTestCase(RunawayBugStackTrace, 00, @"System.Reflection.RuntimeAssembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, RuntimeAssembly locationHint, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean throwOnFileNotFound, Boolean forIntrospection, Boolean suppressSecurityChecks)")]
         [StackTraceTestCase(RunawayBugStackTrace, 01, @"System.Reflection.RuntimeAssembly.InternalLoadAssemblyName(AssemblyName assemblyRef, Evidence assemblySecurity, RuntimeAssembly reqAssembly, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean throwOnFileNotFound, Boolean forIntrospection, Boolean suppressSecurityChecks)")]
         [StackTraceTestCase(RunawayBugStackTrace, 02, @"System.Reflection.Assembly.Load(AssemblyName assemblyRef)")]
