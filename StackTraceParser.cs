@@ -47,7 +47,9 @@ namespace Elmah
                 ( " + Space + @"+
                     ( # Microsoft .NET stack traces
                     \w+ " + Space + @"+
-                    (?<file> [a-z] \: .+? )
+                    (?<file> ( [a-z] \: # Windows rooted path starting with a drive letter
+                             | / )      # *nix rooted path starting with a forward-slash
+                             .+? )
                     \: \w+ " + Space + @"+
                     (?<line> [0-9]+ ) \p{P}?
                     | # Mono stack traces

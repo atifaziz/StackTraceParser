@@ -197,6 +197,63 @@ namespace Tests
             Parse(stackTrace, index, frame, type, method, parameterList, parameters, file, line);
         }
 
+        const string DotNetStackLinuxTrace = @"
+            Elmah.TestException: This is a test exception that can be safely ignored.
+                at Elmah.ErrorLogPageFactory.FindHandler(String name) in /ELMAH/src/Elmah/ErrorLogPageFactory.cs:line 126
+                at Elmah.ErrorLogPageFactory.GetHandler(HttpContext context, String requestType, String url, String pathTranslated) in /ELMAH/src/Elmah/ErrorLogPageFactory.cs:line 66
+                at System.Web.HttpApplication.MapHttpHandler(HttpContext context, String requestType, VirtualPath path, String pathTranslated, Boolean useAppConfig)
+                at System.Web.HttpApplication.MapHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+                at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)";
+
+        [StackTraceTestCase(DotNetStackLinuxTrace, 0,
+            /* Frame         */ @"Elmah.ErrorLogPageFactory.FindHandler(String name) in /ELMAH/src/Elmah/ErrorLogPageFactory.cs:line 126",
+            /* Type          */ @"Elmah.ErrorLogPageFactory",
+            /* Method        */ @"FindHandler",
+            /* ParameterList */ @"(String name)",
+            /* Parameters    */ @"String name",
+            /* File          */ @"/ELMAH/src/Elmah/ErrorLogPageFactory.cs",
+            /* Line          */ @"126")]
+        [StackTraceTestCase(DotNetStackLinuxTrace, 1,
+            /* Frame         */ @"Elmah.ErrorLogPageFactory.GetHandler(HttpContext context, String requestType, String url, String pathTranslated) in /ELMAH/src/Elmah/ErrorLogPageFactory.cs:line 66",
+            /* Type          */ @"Elmah.ErrorLogPageFactory",
+            /* Method        */ @"GetHandler",
+            /* ParameterList */ @"(HttpContext context, String requestType, String url, String pathTranslated)",
+            /* Parameters    */ @"HttpContext context, String requestType, String url, String pathTranslated",
+            /* File          */ @"/ELMAH/src/Elmah/ErrorLogPageFactory.cs",
+            /* Line          */ @"66")]
+        [StackTraceTestCase(DotNetStackLinuxTrace, 2,
+            /* Frame         */ @"System.Web.HttpApplication.MapHttpHandler(HttpContext context, String requestType, VirtualPath path, String pathTranslated, Boolean useAppConfig)",
+            /* Type          */ @"System.Web.HttpApplication",
+            /* Method        */ @"MapHttpHandler",
+            /* ParameterList */ @"(HttpContext context, String requestType, VirtualPath path, String pathTranslated, Boolean useAppConfig)",
+            /* Parameters    */ @"HttpContext context, String requestType, VirtualPath path, String pathTranslated, Boolean useAppConfig",
+            /* File          */ "",
+            /* Line          */ "")]
+        [StackTraceTestCase(DotNetStackLinuxTrace, 3,
+            /* Frame         */  @"System.Web.HttpApplication.MapHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()",
+            /* Type          */  @"System.Web.HttpApplication.MapHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep",
+            /* Method        */  @"Execute",
+            /* ParameterList */  @"()",
+            /* Parameters    */  "",
+            /* File          */  "",
+            /* Line          */  "")]
+        [StackTraceTestCase(DotNetStackLinuxTrace, 4,
+            /* Frame         */ @"System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)",
+            /* Type          */ @"System.Web.HttpApplication",
+            /* Method        */ @"ExecuteStep",
+            /* ParameterList */ @"(IExecutionStep step, Boolean& completedSynchronously)",
+            /* Parameters    */ @"IExecutionStep step, Boolean& completedSynchronously",
+            /* File          */ "",
+            /* Line          */ "")]
+
+        public void ParseDotNetLinuxStackTrace(string stackTrace, int index,
+                                          string frame,
+                                          string type, string method, string parameterList, string parameters,
+                                          string file, string line)
+        {
+            Parse(stackTrace, index, frame, type, method, parameterList, parameters, file, line);
+        }
+
         // See https://github.com/elmah/Elmah/issues/320
 
         const string MonoStackTrace = @"
