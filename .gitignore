@@ -233,3 +233,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.pp
+
+# Packaging
+/dist/**
+*.pp
