@@ -31,8 +31,8 @@
 
   <UsingTask TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
-      <InputFilename ParameterType="System.String" Required="true" />
-      <OutputFilename ParameterType="System.String" Required="true" />
+      <InputFileName ParameterType="System.String" Required="true" />
+      <OutputFileName ParameterType="System.String" Required="true" />
       <MatchExpression ParameterType="System.String" Required="true" />
       <ReplacementText ParameterType="System.String" Required="true" />
     </ParameterGroup>
@@ -43,8 +43,8 @@
       <Code Type="Fragment" Language="cs">
         <![CDATA[
           File.WriteAllText(
-            OutputFilename,
-            Regex.Replace(File.ReadAllText(InputFilename), MatchExpression, ReplacementText)
+            OutputFileName,
+            Regex.Replace(File.ReadAllText(InputFileName), MatchExpression, ReplacementText)
             );
         ]]>
       </Code>
@@ -53,8 +53,8 @@
 
   <Target Name="AfterBuildStep" AfterTargets="Build">
     <ReplaceFileText
-      InputFilename="StackTraceParser.cs"
-      OutputFilename="StackTraceParser.cs.pp"
+      InputFileName="StackTraceParser.cs"
+      OutputFileName="StackTraceParser.cs.pp"
       MatchExpression="Elmah"
       ReplacementText="$rootnamespace$" />
   </Target>
