@@ -25,7 +25,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageOutputPath>.\dist</PackageOutputPath>
-    <PackageReleaseNotes>See https://github.com/atifaziz/StackTraceParser/milestone/3</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://github.com/atifaziz/StackTraceParser/releases/tag/v1.3.1</PackageReleaseNotes>
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
