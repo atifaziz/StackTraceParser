@@ -23,7 +23,9 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <DefaultLanguage>en-us</DefaultLanguage>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageProjectUrl>https://github.com/atifaziz/StackTraceParser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atifaziz/StackTraceParser.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageOutputPath>.\dist</PackageOutputPath>
     <PackageReleaseNotes>See https://github.com/atifaziz/StackTraceParser/releases/tag/v1.3.1</PackageReleaseNotes>
     <IncludeBuildOutput>false</IncludeBuildOutput>
